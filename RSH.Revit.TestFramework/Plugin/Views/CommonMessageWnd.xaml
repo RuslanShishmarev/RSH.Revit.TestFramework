@@ -1,0 +1,14 @@
+﻿<Window x:Class="RSH.Revit.TestFramework.Views.CommonMessageWnd"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RSH.Revit.TestFramework.Views"
+             mc:Ignorable="d" 
+             Height="400" Width="400">
+    <Grid>
+        <ScrollViewer>
+            <TextBox Name="textView" Width="Auto" TextWrapping="Wrap" IsReadOnly="True"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
