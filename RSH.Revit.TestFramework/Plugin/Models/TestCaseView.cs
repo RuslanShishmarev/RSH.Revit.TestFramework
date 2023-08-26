@@ -120,7 +120,7 @@ namespace RSH.Revit.TestFramework.Models
             }
             if (Argument2 != null)
             {
-                viewName += $" && {Argument2}";
+                viewName += $", {Argument2}";
             }
 
             return viewName;

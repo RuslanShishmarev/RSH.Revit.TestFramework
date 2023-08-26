@@ -19,7 +19,7 @@ namespace RSH.Revit.TestFramework
             _doc = commandData.Application.ActiveUIDocument.Document;
         }
         
-        //Simple test method without transaction
+        //Simple test method without transaction with one argument
         [TestRevitMethod(0)]
         public void MethodWithoutTransactionTest(int testArgument)
         {
@@ -29,6 +29,20 @@ namespace RSH.Revit.TestFramework
             WriteLine("--------------------------------");
 
             Asset.IsEqual(testArgument, 0);
+        }
+
+        //Simple test method without transaction with one argument
+        [TestRevitMethod(15, 50)] //will be with error
+        [TestRevitMethod(50, 50)] //will be succeded
+        public void MethodWithoutTransactionTest(int testArgument1, int testArgument2)
+        {
+            WriteLine(nameof(MethodWithoutTransactionTest));
+            WriteLine($"{testArgument1} and {testArgument2}");
+            WriteLine("--------------------------------");
+
+            int sum = testArgument1 + testArgument2;
+
+            Asset.IsEqual(sum, 100);
         }
 
         //Simple test method with transaction
