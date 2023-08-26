@@ -1,5 +1,4 @@
-﻿using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 
 using RSH.Revit.TestFramework.Models;
 
@@ -17,14 +16,7 @@ namespace RSH.Revit.TestFramework.Commands
 
         public void Execute(UIApplication app)
         {
-            using (Transaction testTr = new Transaction(app.ActiveUIDocument.Document))
-            {
-                testTr.Start(_testCaseView.Name);
-
-                _testCaseView.Run();
-
-                testTr.Commit();
-            }
+            _testCaseView.Run(app.ActiveUIDocument.Document);
         }
 
         public void Raise(TestCaseView testCaseView)

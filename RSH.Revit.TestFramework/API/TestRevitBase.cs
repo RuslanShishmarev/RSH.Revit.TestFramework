@@ -1,6 +1,6 @@
-using RSH.Revit.TestFramework.Api.Interfaces;
+using RSH.Revit.TestFramework.API.Interfaces;
 
-namespace RSH.Revit.TestFramework.Api
+namespace RSH.Revit.TestFramework.API
 {
     internal class TestRevitBase
     {

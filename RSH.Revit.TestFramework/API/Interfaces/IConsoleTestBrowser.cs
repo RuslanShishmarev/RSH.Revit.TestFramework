@@ -1,4 +1,4 @@
-﻿namespace RSH.Revit.TestFramework.Api.Interfaces
+﻿namespace RSH.Revit.TestFramework.API.Interfaces
 {
     public interface IConsoleTestBrowser
     {

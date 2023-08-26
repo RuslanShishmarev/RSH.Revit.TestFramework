@@ -1,5 +1,10 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+
+using RSH.Revit.TestFramework.API;
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace RSH.Revit.TestFramework.Models
@@ -16,32 +21,51 @@ namespace RSH.Revit.TestFramework.Models
 
         public string StackTrace { get; private set; }
 
-        public object Argument1 { get; private set; }
+        public object Argument1 { get; }
 
-        public object Argument2 { get; private set; }
+        public object Argument2 { get; }
 
-        public MethodInfo Method { get; private set; }
+        public MethodInfo Method { get; }
+
+        public bool WithTransaction { get; }
+
+        private string _transactionName;
 
         private object _testClassInstance;
 
-        public TestCaseView(object testClassInstance, object argument, MethodInfo method)
+        public TestCaseView(
+            object testClassInstance, 
+            object argument, 
+            MethodInfo method,
+            bool withTransaction,
+            string transactionName)
         {
             _testClassInstance = testClassInstance;
             Argument1 = argument;
             Method = method;
+            WithTransaction = withTransaction;
+            _transactionName = transactionName ?? Method?.Name;
             Result = null;
         }
 
-        public TestCaseView(object testClassInstance, object argument1, object argument2, MethodInfo method)
+        public TestCaseView(
+            object testClassInstance, 
+            object argument1, 
+            object argument2, 
+            MethodInfo method,
+            bool withTransaction,
+            string transactionName)
         {
             _testClassInstance = testClassInstance;
             Argument1 = argument1;
             Argument2 = argument2;
             Method = method;
+            WithTransaction = withTransaction;
+            _transactionName = transactionName ?? Method?.Name;
             Result = null;
         }
 
-        public void Run()
+        public void Run(Document doc)
         {
             try
             {
@@ -55,7 +79,27 @@ namespace RSH.Revit.TestFramework.Models
                     argumentsToInvoke.Add(Argument2);
                 }
 
-                Method.Invoke(_testClassInstance, argumentsToInvoke.ToArray());
+                var methodDelegate = new Action(() =>
+                {
+                    Method.Invoke(_testClassInstance, argumentsToInvoke.ToArray());
+                });
+
+                if (WithTransaction)
+                {
+                    using (Transaction testTr = new Transaction(doc))
+                    {
+                        testTr.Start(_transactionName);
+
+                        methodDelegate.Invoke();
+
+                        testTr.Commit();
+                    }
+                }
+                else
+                {
+                    methodDelegate.Invoke();
+                }
+
                 ResultText = "Succeded";
                 Result = true;
             }

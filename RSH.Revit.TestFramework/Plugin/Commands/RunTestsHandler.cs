@@ -1,9 +1,8 @@
-﻿using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-
-using System.Collections.Generic;
+﻿using Autodesk.Revit.UI;
 
 using RSH.Revit.TestFramework.Models;
+
+using System.Collections.Generic;
 
 namespace RSH.Revit.TestFramework.Commands
 {
@@ -19,15 +18,10 @@ namespace RSH.Revit.TestFramework.Commands
 
         public void Execute(UIApplication app)
         {
-            using (Transaction testTr = new Transaction(app.ActiveUIDocument.Document))
+            foreach (var test in _testCaseViews)
             {
-                testTr.Start("Tests");
-                foreach (var test in _testCaseViews)
-                {
-                    test.Run();
-                }
-                testTr.Commit();
-            }
+                test.Run(app.ActiveUIDocument.Document);
+            }           
         }
 
         public void Raise(IEnumerable<TestCaseView> testCaseViews)

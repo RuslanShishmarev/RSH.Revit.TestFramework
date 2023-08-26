@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RSH.Revit.TestFramework.Api
+namespace RSH.Revit.TestFramework.API
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     internal class TestRevitMethodAttribute : Attribute
@@ -19,8 +19,6 @@ namespace RSH.Revit.TestFramework.Api
             Argument2 = argument2;
         }
 
-        public TestRevitMethodAttribute()
-        {
-        }
+        public TestRevitMethodAttribute() { }
     }
 }

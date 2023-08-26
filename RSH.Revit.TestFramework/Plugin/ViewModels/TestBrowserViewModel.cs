@@ -8,8 +8,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
-using RSH.Revit.TestFramework.Api;
-using RSH.Revit.TestFramework.Api.Interfaces;
+using RSH.Revit.TestFramework.API;
+using RSH.Revit.TestFramework.API.Interfaces;
 using RSH.Revit.TestFramework.Commands;
 using RSH.Revit.TestFramework.Models;
 using RSH.Revit.TestFramework.Services;
@@ -140,24 +140,16 @@ namespace RSH.Revit.TestFramework.ViewModels
                         foreach (MethodInfo methodInfo in testMethods)
                         {
                             var attributes = methodInfo.GetCustomAttributes(typeof(TestRevitMethodAttribute)).Cast<TestRevitMethodAttribute>();
+                            var transactionAtribute = methodInfo.GetCustomAttribute(typeof(TransactionMethod)) as TransactionMethod;
                             foreach (TestRevitMethodAttribute attribute in attributes)
                             {
-                                TestCaseView testCase = null;
-                                if (attribute.Argument1 != null && attribute.Argument2 is null)
-                                {
-                                    testCase = new TestCaseView(
-                                    testClassInstance: testClassesInstance,
-                                    argument: attribute.Argument1,
-                                    method: methodInfo);
-                                }
-                                else if (attribute.Argument1 != null && attribute.Argument2 != null)
-                                {
-                                    testCase = new TestCaseView(
-                                    testClassInstance: testClassesInstance,
-                                    argument1: attribute.Argument1,
-                                    argument2: attribute.Argument2,
-                                    method: methodInfo);
-                                }
+                                TestCaseView testCase = new TestCaseView(
+                                        testClassInstance: testClassesInstance,
+                                        argument1: attribute.Argument1,
+                                        argument2: attribute.Argument2,
+                                        method: methodInfo,
+                                        withTransaction: transactionAtribute != null,
+                                        transactionName: transactionAtribute?.Name);
 
                                 TestCaseViews.Add(testCase);
                             }
@@ -212,15 +204,9 @@ namespace RSH.Revit.TestFramework.ViewModels
 
             if (_runTestsHandler is null)
             {
-                using (Transaction testTr = new Transaction(_doc))
+                foreach (var test in TestCaseViews)
                 {
-                    testTr.Start("Tests");
-                    foreach (var test in TestCaseViews)
-                    {
-                        test.Run();
-                    }
-
-                    testTr.Commit();
+                    test.Run(_doc);
                 }
             }
 
@@ -246,12 +232,7 @@ namespace RSH.Revit.TestFramework.ViewModels
                 }
                 else
                 {
-                    using (Transaction testTr = new Transaction(_doc))
-                    {
-                        testTr.Start(SelectedTestCaseView.Name);
-                        SelectedTestCaseView.Run();
-                        testTr.Commit();
-                    }
+                    SelectedTestCaseView.Run(_doc);
                 }
 
                 RefreshView(testListView);

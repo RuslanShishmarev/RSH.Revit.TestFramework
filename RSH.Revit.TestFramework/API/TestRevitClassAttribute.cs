@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RSH.Revit.TestFramework.Api
+namespace RSH.Revit.TestFramework.API
 {
     [AttributeUsage(AttributeTargets.Class)]
     internal class TestRevitClassAttribute : Attribute
