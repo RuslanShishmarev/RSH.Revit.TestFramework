@@ -34,7 +34,7 @@ namespace RSH.Revit.TestFramework
         //Simple test method with transaction
         //A new transaction will be created with the spectial name or method name when the test is run
         //[TransactionMethod("My method")]
-        [TransactionMethod] 
+        [TransactionMethod]
         [TestRevitMethod]
         public void MethodWithTransactionTest()
         {

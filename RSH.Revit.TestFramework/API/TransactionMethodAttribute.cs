@@ -3,15 +3,15 @@
 namespace RSH.Revit.TestFramework.API
 {
     [AttributeUsage(AttributeTargets.Method)]
-    internal class TransactionMethod : Attribute
+    internal class TransactionMethodAttribute : Attribute
     {
         public string Name { get; }
 
-        public TransactionMethod(string name)
+        public TransactionMethodAttribute(string name)
         {
             Name = name;
         }
 
-        public TransactionMethod() { }
+        public TransactionMethodAttribute() { }
     }
 }

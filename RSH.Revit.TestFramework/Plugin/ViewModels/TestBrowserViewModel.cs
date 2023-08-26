@@ -77,7 +77,7 @@ namespace RSH.Revit.TestFramework.ViewModels
 
         public RelayCommand ClearConsoleContentCommand { get; private set; }
 
-        public RelayCommand CopyElementIdCommand { get; private set; }
+        public RelayCommand CopyAttributesCommand { get; private set; }
 
         public RelayCommand RunSelectedTestCommand { get; private set; }
 
@@ -108,7 +108,7 @@ namespace RSH.Revit.TestFramework.ViewModels
             RunTestMethodsCommand = new RelayCommand(RunTestMethods);
             ShowStackTraceCommand = new RelayCommand(ShowStackTrace);
             ClearConsoleContentCommand = new RelayCommand(ClearConsoleContent);
-            CopyElementIdCommand = new RelayCommand(CopyElementId);
+            CopyAttributesCommand = new RelayCommand(CopyAttributes);
             RunSelectedTestCommand = new RelayCommand(RunSelectedTest);
         }
 
@@ -140,7 +140,7 @@ namespace RSH.Revit.TestFramework.ViewModels
                         foreach (MethodInfo methodInfo in testMethods)
                         {
                             var attributes = methodInfo.GetCustomAttributes(typeof(TestRevitMethodAttribute)).Cast<TestRevitMethodAttribute>();
-                            var transactionAtribute = methodInfo.GetCustomAttribute(typeof(TransactionMethod)) as TransactionMethod;
+                            var transactionAtribute = methodInfo.GetCustomAttribute(typeof(TransactionMethodAttribute)) as TransactionMethodAttribute;
                             foreach (TestRevitMethodAttribute attribute in attributes)
                             {
                                 TestCaseView testCase = new TestCaseView(
@@ -177,23 +177,11 @@ namespace RSH.Revit.TestFramework.ViewModels
             ConsoleContent = string.Empty;
         }
 
-        private void CopyElementId(object elementIdObj)
+        private void CopyAttributes(object testCaseObj)
         {
-            if (elementIdObj == null) return;
+            var testCase = testCaseObj as TestCaseView;
 
-            string elementId = elementIdObj as string;
-            Clipboard.SetText(elementId);
-
-            if (elementIdObj.ToString().Contains(","))
-            {
-                string[] ids = elementIdObj.ToString().Split(',');
-                var elementIds = ids.Select(id => new ElementId(int.Parse(id))).ToArray();
-                _uiapp.ActiveUIDocument.Selection.SetElementIds(elementIds);
-            }
-            else
-            {
-                _uiapp.ActiveUIDocument.Selection.SetElementIds(new ElementId[] { new ElementId(int.Parse(elementId)) });
-            }
+            Clipboard.SetText(testCase?.ToString());
         }
 
         private void RunTestMethods(object testListView)
@@ -215,7 +203,7 @@ namespace RSH.Revit.TestFramework.ViewModels
 
         private void ShowStackTrace(object testCaseObj)
         {
-            TestCaseView testCase = testCaseObj as TestCaseView;
+            var testCase = testCaseObj as TestCaseView;
 
             ViewService.ShowMessage(testCase.StackTrace);
         }

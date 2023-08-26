@@ -70,7 +70,7 @@
     <Compile Include="API\TestRevitBase.cs" />
     <Compile Include="API\TestRevitClassAttribute.cs" />
     <Compile Include="API\TestRevitMethodAttribute.cs" />
-    <Compile Include="API\TransactionMethod.cs" />
+    <Compile Include="API\TransactionMethodAttribute.cs" />
     <Compile Include="Plugin\Commands\RunTestHandler.cs" />
     <Compile Include="Plugin\Commands\RunTestsHandler.cs" />
     <Compile Include="Plugin\Commands\StartTestsCommand.cs" />
