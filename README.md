@@ -36,11 +36,11 @@ public void MethodWithoutTransactionTest(int testArgument1, int testArgument2)
 public void MethodWithTransactionTest()
 {
   WriteLine(nameof(MethodWithTransactionTest));
-  var wallType = new FilteredElementCollector(_doc).OfClass(typeof(WallType)).FirstOrDefault();
-  var firstLevel = new FilteredElementCollector(_doc).OfClass(typeof(Level)).FirstOrDefault();
+  var wallType = new FilteredElementCollector(Doc).OfClass(typeof(WallType)).FirstOrDefault();
+  var firstLevel = new FilteredElementCollector(Doc).OfClass(typeof(Level)).FirstOrDefault();
 
   var newTestWall = Wall.Create(
-    document: _doc,
+    document: Doc,
     curve: Line.CreateBound(XYZ.Zero, new XYZ(10, 10, 0)),
     wallTypeId: wallType.Id,
     levelId: firstLevel.Id,
