@@ -68,7 +68,6 @@
     <Compile Include="API\Asset.cs" />
     <Compile Include="API\Interfaces\IConsoleTestBrowser.cs" />
     <Compile Include="API\TestRevitBase.cs" />
-    <Compile Include="API\TestRevitClassAttribute.cs" />
     <Compile Include="API\TestRevitMethodAttribute.cs" />
     <Compile Include="API\TransactionMethodAttribute.cs" />
     <Compile Include="Plugin\Commands\RunTestHandler.cs" />

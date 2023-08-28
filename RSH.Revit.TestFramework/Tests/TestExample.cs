@@ -7,18 +7,8 @@ using System.Linq;
 
 namespace RSH.Revit.TestFramework
 {
-    [TestRevitClass]
     internal class TestExample : TestRevitBase
-    {
-        private ExternalCommandData _commandData;
-        private Document _doc;
-
-        public TestExample(ExternalCommandData commandData)
-        {
-            _commandData = commandData;
-            _doc = commandData.Application.ActiveUIDocument.Document;
-        }
-        
+    {        
         //Simple test method without transaction with one argument
         [TestRevitMethod(0)]
         public void MethodWithoutTransactionTest(int testArgument)
@@ -54,11 +44,11 @@ namespace RSH.Revit.TestFramework
         {
             WriteLine(nameof(MethodWithTransactionTest));
 
-            var wallType = new FilteredElementCollector(_doc).OfClass(typeof(WallType)).FirstOrDefault();
-            var firstLevel = new FilteredElementCollector(_doc).OfClass(typeof(Level)).FirstOrDefault();
+            var wallType = new FilteredElementCollector(Doc).OfClass(typeof(WallType)).FirstOrDefault();
+            var firstLevel = new FilteredElementCollector(Doc).OfClass(typeof(Level)).FirstOrDefault();
 
             var newTestWall = Wall.Create(
-                document: _doc,
+                document: Doc,
                 curve: Line.CreateBound(XYZ.Zero, new XYZ(10, 10, 0)),
                 wallTypeId: wallType.Id,
                 levelId: firstLevel.Id,
@@ -71,6 +61,19 @@ namespace RSH.Revit.TestFramework
             WriteLine("--------------------------------");
 
             Asset.IsNotEqual(newTestWall, null);
+        }
+
+        [TestRevitMethod(524851)]
+        public void MethodToGetWallAndCheckParams(int wallId)
+        {
+            var currentWall = Doc.GetElement(new ElementId(wallId));
+
+            var wallHeight = currentWall.get_Parameter(BuiltInParameter.WALL_USER_HEIGHT_PARAM)?.AsValueString();
+
+            WriteLine(wallHeight);
+
+            Asset.IsNotEqual(wallHeight, null);
+            Asset.IsEqual(wallHeight, "3400");
         }
     }
 }

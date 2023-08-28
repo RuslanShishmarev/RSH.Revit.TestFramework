@@ -1,13 +1,20 @@
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+
 using RSH.Revit.TestFramework.API.Interfaces;
 
 namespace RSH.Revit.TestFramework.API
 {
-    internal class TestRevitBase
+    internal abstract class TestRevitBase
     {
         private IConsoleTestBrowser _console;
-        public void Setup(IConsoleTestBrowser console)
+        protected ExternalCommandData CommandData;
+        protected Document Doc;
+        public void Setup(IConsoleTestBrowser console, ExternalCommandData commandData)
         {
             _console = console;
+            CommandData = commandData;
+            Doc = commandData.Application.ActiveUIDocument.Document;
         }
 
         protected void WriteLine(string text)

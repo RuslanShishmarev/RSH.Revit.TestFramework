@@ -124,16 +124,15 @@ namespace RSH.Revit.TestFramework.ViewModels
 
                 // get all classes for test browser
                 var testClassesTypes = testAssembly.GetTypes();
-                var testClasses = testClassesTypes.Where(c => c.CustomAttributes.Any(x => x.AttributeType.Name == typeof(TestRevitClassAttribute).Name));
+                var testClasses = testClassesTypes.Where(c => c.BaseType == typeof(TestRevitBase));
 
                 if (testClasses.Any())
                 {
                     foreach (Type testClassesType in testClasses)
                     {
                         // create instances
-                        var testClassesInstance = Activator.CreateInstance(testClassesType, new object[] { _commandData });
-
-                        if (testClassesInstance is TestRevitBase testClassesInstanceAsTestRevitBase) testClassesInstanceAsTestRevitBase.Setup(this);
+                        var testClassesInstance = Activator.CreateInstance(testClassesType, new object[] {});
+                        (testClassesInstance as TestRevitBase).Setup(this, _commandData);
 
                         var testMethods = testClassesType.GetMethods().Where(IsMethodTest);
 
