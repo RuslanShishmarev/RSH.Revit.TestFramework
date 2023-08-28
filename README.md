@@ -2,9 +2,8 @@
 ## Desctription
 ### Open Source test framework for Revit plugins development.
 1) Clone or download this project and add to your solution and run framework from "Add-In Manager" tool
-2) If you want to create tests methods you should create class in RSH.Revit.TestFramework.Tests namespace with TestRevitClassAttribute. There is folder with name "Tests".
-3) To interact with the console view test class should be inherited by TestRevitBase.
-4) Example test methods:
+2) If you want to create tests methods you should create class in RSH.Revit.TestFramework.Tests namespace with inherited by TestRevitBase. There is folder with name "Tests".
+3) Example test methods:
 #### Simple test method without transaction with one argument
 ```
 [TestRevitMethod(0)]
